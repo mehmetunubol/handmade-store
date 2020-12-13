@@ -1,0 +1,65 @@
+{
+  "name": "Cart",
+  "fields": [
+    {
+      "fieldName": "notes",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "placedDate",
+      "fieldType": "Instant",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "status",
+      "fieldType": "OrderStatus",
+      "fieldValues": "PENDING,WAITPAYMENT,WAITPAYCONFIRM,WAITSHIP,DECLINED,SHIPPING,COMPLETED,RETURNSHIPPING,RETURNED,CANCELLED",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "totalPrice",
+      "fieldType": "BigDecimal",
+      "fieldValidateRules": ["required", "min"],
+      "fieldValidateRulesMin": "0"
+    },
+    {
+      "fieldName": "paymentMethod",
+      "fieldType": "PaymentMethod",
+      "fieldValues": "CREDIT_CARD,TRANSFER,HAND_PAY",
+      "fieldValidateRules": ["required"]
+    }
+  ],
+  "relationships": [
+    {
+      "relationshipType": "one-to-many",
+      "otherEntityName": "userAddress",
+      "otherEntityRelationshipName": "cart",
+      "relationshipValidateRules": "required",
+      "relationshipName": "address"
+    },
+    {
+      "relationshipType": "one-to-many",
+      "otherEntityName": "orderItems",
+      "otherEntityRelationshipName": "cart",
+      "relationshipName": "order"
+    },
+    {
+      "relationshipType": "many-to-one",
+      "otherEntityName": "clientDetails",
+      "otherEntityRelationshipName": "cart",
+      "relationshipName": "clientDetails",
+      "otherEntityField": "id"
+    }
+  ],
+  "changelogDate": "20201213183159",
+  "entityTableName": "cart",
+  "dto": "no",
+  "pagination": "pagination",
+  "service": "serviceClass",
+  "jpaMetamodelFiltering": false,
+  "fluentMethods": true,
+  "readOnly": false,
+  "embedded": false,
+  "clientRootFolder": "",
+  "applications": ["store"]
+}

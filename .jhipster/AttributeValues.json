@@ -1,0 +1,36 @@
+{
+  "name": "AttributeValues",
+  "fields": [
+    {
+      "fieldName": "value",
+      "fieldType": "String",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "price",
+      "fieldType": "BigDecimal",
+      "fieldValidateRules": ["required", "min"],
+      "fieldValidateRulesMin": "0"
+    }
+  ],
+  "relationships": [
+    {
+      "relationshipType": "many-to-one",
+      "otherEntityName": "attribute",
+      "otherEntityRelationshipName": "attributeValues",
+      "relationshipName": "attribute",
+      "otherEntityField": "id"
+    }
+  ],
+  "changelogDate": "20201213183559",
+  "entityTableName": "attribute_values",
+  "dto": "no",
+  "pagination": "pagination",
+  "service": "serviceClass",
+  "jpaMetamodelFiltering": false,
+  "fluentMethods": true,
+  "readOnly": false,
+  "embedded": false,
+  "clientRootFolder": "",
+  "applications": ["store"]
+}

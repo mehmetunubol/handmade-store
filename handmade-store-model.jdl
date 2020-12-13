@@ -1,0 +1,114 @@
+application {
+  config {
+    baseName store
+    packageName com.unubol.demo.store
+    authenticationType jwt
+    prodDatabaseType mysql
+    buildTool gradle
+    clientFramework react
+    useSass true
+    enableTranslation false
+  }
+  entities *
+}
+
+// USER MODELS
+entity ClientDetails {
+    gender Gender required
+    phone String required
+    city String required
+    country String required
+}
+relationship OneToOne {
+    ClientDetails{user(login) required} to User
+}
+
+entity UserAddress {
+    name String required
+    type String required // billing, shipping
+    detail String required
+    city String required
+    country String required
+}
+relationship ManyToOne {
+    UserAddress{ClientDetails required} to ClientDetails
+}
+enum Gender {
+    MALE, FEMALE, OTHER
+}
+
+    // User hasMany Cart,
+    // Cart has Many Addresses
+
+// END OF USER MODELS
+
+
+// ORDER MODELS
+entity Cart { 
+    // User hasMany Cart,
+    // Cart has Many Addresses
+    notes String
+    placedDate Instant required
+    status OrderStatus required
+    totalPrice BigDecimal required min(0)
+    paymentMethod PaymentMethod required
+}
+relationship OneToMany {
+	Cart{address required} to UserAddress
+    ClientDetails{cart required} to Cart
+}
+
+enum OrderStatus {
+    PENDING, WAITPAYMENT, WAITPAYCONFIRM, WAITSHIP, DECLINED, SHIPPING, COMPLETED, RETURNSHIPPING, RETURNED , CANCELLED
+}
+
+enum PaymentMethod {
+    CREDIT_CARD, TRANSFER, HAND_PAY
+}
+
+entity OrderItems { // order_items
+    quantity Integer required min(0)
+    price BigDecimal required min(0)
+}
+relationship ManyToOne {
+    OrderItems{product(name) required} to Product
+}
+relationship OneToMany {
+    Cart{order} to OrderItems{cart required}
+}
+// END OF ORDER MODELS
+
+// PRODUCT MODEL
+/** Product sold by the Online store */
+entity Product {
+    name String required
+    description String
+    price BigDecimal required min(0)
+    image ImageBlob
+}
+
+entity Attribute {
+    name String required
+    image ImageBlob
+}
+entity AttributeValues {
+    value String required
+    price BigDecimal required min(0)
+}
+
+entity ProductCategory {
+    name String required
+    description String
+    image ImageBlob
+}
+
+
+relationship OneToMany {
+    ProductCategory{parent} to ProductCategory
+    Product{productCategory(name)} to ProductCategory
+    Product{attribute} to Attribute
+    Attribute{attributeValues} to AttributeValues
+}
+
+service * with serviceClass
+paginate ClientDetails, UserAddress, Product, ProductCategory, Attribute, AttributeValues, Cart with pagination
