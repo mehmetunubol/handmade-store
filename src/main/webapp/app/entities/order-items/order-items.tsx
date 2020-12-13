@@ -50,7 +50,7 @@ export const OrderItems = (props: IOrderItemsProps) => {
                   </td>
                   <td>{orderItems.quantity}</td>
                   <td>{orderItems.price}</td>
-                  <td>{orderItems.product ? <Link to={`product/${orderItems.product.id}`}>{orderItems.product.name}</Link> : ''}</td>
+                  <td>{orderItems.product ? <Link to={`product/${orderItems.product.id}`}>{orderItems.product.id}</Link> : ''}</td>
                   <td>{orderItems.cart ? <Link to={`cart/${orderItems.cart.id}`}>{orderItems.cart.id}</Link> : ''}</td>
                   <td className="text-right">
                     <div className="btn-group flex-btn-group-container">

@@ -37,11 +37,12 @@
       "otherEntityField": "id"
     },
     {
-      "relationshipType": "many-to-one",
+      "relationshipType": "many-to-many",
       "otherEntityName": "cart",
       "otherEntityRelationshipName": "address",
       "relationshipName": "cart",
-      "otherEntityField": "id"
+      "otherEntityField": "id",
+      "ownerSide": false
     }
   ],
   "changelogDate": "20201213183059",

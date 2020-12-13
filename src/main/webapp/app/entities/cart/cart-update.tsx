@@ -7,6 +7,8 @@ import { ICrudGetAction, ICrudGetAllAction, ICrudPutAction } from 'react-jhipste
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { IRootState } from 'app/shared/reducers';
 
+import { IUserAddress } from 'app/shared/model/user-address.model';
+import { getEntities as getUserAddresses } from 'app/entities/user-address/user-address.reducer';
 import { IClientDetails } from 'app/shared/model/client-details.model';
 import { getEntities as getClientDetails } from 'app/entities/client-details/client-details.reducer';
 import { getEntity, updateEntity, createEntity, reset } from './cart.reducer';
@@ -17,10 +19,11 @@ import { mapIdList } from 'app/shared/util/entity-utils';
 export interface ICartUpdateProps extends StateProps, DispatchProps, RouteComponentProps<{ id: string }> {}
 
 export const CartUpdate = (props: ICartUpdateProps) => {
+  const [idsaddress, setIdsaddress] = useState([]);
   const [clientDetailsId, setClientDetailsId] = useState('0');
   const [isNew, setIsNew] = useState(!props.match.params || !props.match.params.id);
 
-  const { cartEntity, clientDetails, loading, updating } = props;
+  const { cartEntity, userAddresses, clientDetails, loading, updating } = props;
 
   const handleClose = () => {
     props.history.push('/cart' + props.location.search);
@@ -33,6 +36,7 @@ export const CartUpdate = (props: ICartUpdateProps) => {
       props.getEntity(props.match.params.id);
     }
 
+    props.getUserAddresses();
     props.getClientDetails();
   }, []);
 
@@ -49,6 +53,7 @@ export const CartUpdate = (props: ICartUpdateProps) => {
       const entity = {
         ...cartEntity,
         ...values,
+        addresses: mapIdList(values.addresses),
       };
 
       if (isNew) {
@@ -155,11 +160,18 @@ export const CartUpdate = (props: ICartUpdateProps) => {
                 </AvInput>
               </AvGroup>
               <AvGroup>
-                <Label for="cart-clientDetails">Client Details</Label>
-                <AvInput id="cart-clientDetails" type="select" className="form-control" name="clientDetails.id">
+                <Label for="cart-address">Address</Label>
+                <AvInput
+                  id="cart-address"
+                  type="select"
+                  multiple
+                  className="form-control"
+                  name="addresses"
+                  value={cartEntity.addresses && cartEntity.addresses.map(e => e.id)}
+                >
                   <option value="" key="0" />
-                  {clientDetails
-                    ? clientDetails.map(otherEntity => (
+                  {userAddresses
+                    ? userAddresses.map(otherEntity => (
                         <option value={otherEntity.id} key={otherEntity.id}>
                           {otherEntity.id}
                         </option>
@@ -186,6 +198,7 @@ export const CartUpdate = (props: ICartUpdateProps) => {
 };
 
 const mapStateToProps = (storeState: IRootState) => ({
+  userAddresses: storeState.userAddress.entities,
   clientDetails: storeState.clientDetails.entities,
   cartEntity: storeState.cart.entity,
   loading: storeState.cart.loading,
@@ -194,6 +207,7 @@ const mapStateToProps = (storeState: IRootState) => ({
 });
 
 const mapDispatchToProps = {
+  getUserAddresses,
   getClientDetails,
   getEntity,
   updateEntity,

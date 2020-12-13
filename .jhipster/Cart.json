@@ -32,23 +32,26 @@
   "relationships": [
     {
       "relationshipType": "one-to-many",
-      "otherEntityName": "userAddress",
-      "otherEntityRelationshipName": "cart",
-      "relationshipValidateRules": "required",
-      "relationshipName": "address"
-    },
-    {
-      "relationshipType": "one-to-many",
       "otherEntityName": "orderItems",
       "otherEntityRelationshipName": "cart",
       "relationshipName": "order"
     },
     {
-      "relationshipType": "many-to-one",
+      "relationshipType": "many-to-many",
+      "otherEntityName": "userAddress",
+      "otherEntityRelationshipName": "cart",
+      "relationshipValidateRules": "required",
+      "relationshipName": "address",
+      "otherEntityField": "id",
+      "ownerSide": true
+    },
+    {
+      "relationshipType": "many-to-many",
       "otherEntityName": "clientDetails",
       "otherEntityRelationshipName": "cart",
       "relationshipName": "clientDetails",
-      "otherEntityField": "id"
+      "otherEntityField": "id",
+      "ownerSide": false
     }
   ],
   "changelogDate": "20201213183159",

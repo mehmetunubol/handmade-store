@@ -88,12 +88,18 @@ public class CartResource {
      * {@code GET  /carts} : get all the carts.
      *
      * @param pageable the pagination information.
+     * @param eagerload flag to eager load entities from relationships (This is applicable for many-to-many).
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of carts in body.
      */
     @GetMapping("/carts")
-    public ResponseEntity<List<Cart>> getAllCarts(Pageable pageable) {
+    public ResponseEntity<List<Cart>> getAllCarts(Pageable pageable, @RequestParam(required = false, defaultValue = "false") boolean eagerload) {
         log.debug("REST request to get a page of Carts");
-        Page<Cart> page = cartService.findAll(pageable);
+        Page<Cart> page;
+        if (eagerload) {
+            page = cartService.findAllWithEagerRelationships(pageable);
+        } else {
+            page = cartService.findAll(pageable);
+        }
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
         return ResponseEntity.ok().headers(headers).body(page.getContent());
     }

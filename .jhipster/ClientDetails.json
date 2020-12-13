@@ -34,11 +34,13 @@
       "ownerSide": true
     },
     {
-      "relationshipType": "one-to-many",
+      "relationshipType": "many-to-many",
       "otherEntityName": "cart",
       "otherEntityRelationshipName": "clientDetails",
       "relationshipValidateRules": "required",
-      "relationshipName": "cart"
+      "relationshipName": "cart",
+      "otherEntityField": "id",
+      "ownerSide": true
     }
   ],
   "changelogDate": "20201213182959",

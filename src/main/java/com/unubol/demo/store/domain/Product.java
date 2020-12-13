@@ -46,12 +46,19 @@ public class Product implements Serializable {
     @Column(name = "image_content_type")
     private String imageContentType;
 
-    @OneToMany(mappedBy = "product")
+    @ManyToMany
     @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
+    @NotNull
+    @JoinTable(name = "product_product_category",
+               joinColumns = @JoinColumn(name = "product_id", referencedColumnName = "id"),
+               inverseJoinColumns = @JoinColumn(name = "product_category_id", referencedColumnName = "id"))
     private Set<ProductCategory> productCategories = new HashSet<>();
 
-    @OneToMany(mappedBy = "product")
+    @ManyToMany
     @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
+    @JoinTable(name = "product_attribute",
+               joinColumns = @JoinColumn(name = "product_id", referencedColumnName = "id"),
+               inverseJoinColumns = @JoinColumn(name = "attribute_id", referencedColumnName = "id"))
     private Set<Attribute> attributes = new HashSet<>();
 
     // jhipster-needle-entity-add-field - JHipster will add fields here
@@ -139,13 +146,13 @@ public class Product implements Serializable {
 
     public Product addProductCategory(ProductCategory productCategory) {
         this.productCategories.add(productCategory);
-        productCategory.setProduct(this);
+        productCategory.getProducts().add(this);
         return this;
     }
 
     public Product removeProductCategory(ProductCategory productCategory) {
         this.productCategories.remove(productCategory);
-        productCategory.setProduct(null);
+        productCategory.getProducts().remove(this);
         return this;
     }
 
@@ -164,13 +171,13 @@ public class Product implements Serializable {
 
     public Product addAttribute(Attribute attribute) {
         this.attributes.add(attribute);
-        attribute.setProduct(this);
+        attribute.getProducts().add(this);
         return this;
     }
 
     public Product removeAttribute(Attribute attribute) {
         this.attributes.remove(attribute);
-        attribute.setProduct(null);
+        attribute.getProducts().remove(this);
         return this;
     }
 

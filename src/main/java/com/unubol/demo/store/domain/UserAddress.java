@@ -1,5 +1,6 @@
 package com.unubol.demo.store.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
@@ -8,6 +9,8 @@ import javax.persistence.*;
 import javax.validation.constraints.*;
 
 import java.io.Serializable;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * A UserAddress.
@@ -48,9 +51,10 @@ public class UserAddress implements Serializable {
     @JsonIgnoreProperties(value = "userAddresses", allowSetters = true)
     private ClientDetails clientDetails;
 
-    @ManyToOne
-    @JsonIgnoreProperties(value = "addresses", allowSetters = true)
-    private Cart cart;
+    @ManyToMany(mappedBy = "addresses")
+    @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
+    @JsonIgnore
+    private Set<Cart> carts = new HashSet<>();
 
     // jhipster-needle-entity-add-field - JHipster will add fields here
     public Long getId() {
@@ -139,17 +143,29 @@ public class UserAddress implements Serializable {
         this.clientDetails = clientDetails;
     }
 
-    public Cart getCart() {
-        return cart;
+    public Set<Cart> getCarts() {
+        return carts;
     }
 
-    public UserAddress cart(Cart cart) {
-        this.cart = cart;
+    public UserAddress carts(Set<Cart> carts) {
+        this.carts = carts;
         return this;
     }
 
-    public void setCart(Cart cart) {
-        this.cart = cart;
+    public UserAddress addCart(Cart cart) {
+        this.carts.add(cart);
+        cart.getAddresses().add(this);
+        return this;
+    }
+
+    public UserAddress removeCart(Cart cart) {
+        this.carts.remove(cart);
+        cart.getAddresses().remove(this);
+        return this;
+    }
+
+    public void setCarts(Set<Cart> carts) {
+        this.carts = carts;
     }
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here
 

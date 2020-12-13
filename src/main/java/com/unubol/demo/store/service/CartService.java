@@ -52,6 +52,15 @@ public class CartService {
 
 
     /**
+     * Get all the carts with eager load of many-to-many relationships.
+     *
+     * @return the list of entities.
+     */
+    public Page<Cart> findAllWithEagerRelationships(Pageable pageable) {
+        return cartRepository.findAllWithEagerRelationships(pageable);
+    }
+
+    /**
      * Get one cart by id.
      *
      * @param id the id of the entity.
@@ -60,7 +69,7 @@ public class CartService {
     @Transactional(readOnly = true)
     public Optional<Cart> findOne(Long id) {
         log.debug("Request to get Cart : {}", id);
-        return cartRepository.findById(id);
+        return cartRepository.findOneWithEagerRelationships(id);
     }
 
     /**

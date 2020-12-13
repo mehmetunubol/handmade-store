@@ -100,9 +100,6 @@ export const UserAddress = (props: IUserAddressProps) => {
                 <th>
                   Client Details <FontAwesomeIcon icon="sort" />
                 </th>
-                <th>
-                  Cart <FontAwesomeIcon icon="sort" />
-                </th>
                 <th />
               </tr>
             </thead>
@@ -126,7 +123,6 @@ export const UserAddress = (props: IUserAddressProps) => {
                       ''
                     )}
                   </td>
-                  <td>{userAddress.cart ? <Link to={`cart/${userAddress.cart.id}`}>{userAddress.cart.id}</Link> : ''}</td>
                   <td className="text-right">
                     <div className="btn-group flex-btn-group-container">
                       <Button tag={Link} to={`${match.url}/${userAddress.id}`} color="info" size="sm">

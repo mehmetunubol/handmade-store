@@ -52,6 +52,15 @@ public class ClientDetailsService {
 
 
     /**
+     * Get all the clientDetails with eager load of many-to-many relationships.
+     *
+     * @return the list of entities.
+     */
+    public Page<ClientDetails> findAllWithEagerRelationships(Pageable pageable) {
+        return clientDetailsRepository.findAllWithEagerRelationships(pageable);
+    }
+
+    /**
      * Get one clientDetails by id.
      *
      * @param id the id of the entity.
@@ -60,7 +69,7 @@ public class ClientDetailsService {
     @Transactional(readOnly = true)
     public Optional<ClientDetails> findOne(Long id) {
         log.debug("Request to get ClientDetails : {}", id);
-        return clientDetailsRepository.findById(id);
+        return clientDetailsRepository.findOneWithEagerRelationships(id);
     }
 
     /**

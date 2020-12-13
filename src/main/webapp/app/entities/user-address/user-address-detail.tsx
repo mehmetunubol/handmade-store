@@ -47,8 +47,6 @@ export const UserAddressDetail = (props: IUserAddressDetailProps) => {
           <dd>{userAddressEntity.country}</dd>
           <dt>Client Details</dt>
           <dd>{userAddressEntity.clientDetails ? userAddressEntity.clientDetails.id : ''}</dd>
-          <dt>Cart</dt>
-          <dd>{userAddressEntity.cart ? userAddressEntity.cart.id : ''}</dd>
         </dl>
         <Button tag={Link} to="/user-address" replace color="info">
           <FontAwesomeIcon icon="arrow-left" /> <span className="d-none d-md-inline">Back</span>

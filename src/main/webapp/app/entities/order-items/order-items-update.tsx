@@ -124,7 +124,7 @@ export const OrderItemsUpdate = (props: IOrderItemsUpdateProps) => {
                   {products
                     ? products.map(otherEntity => (
                         <option value={otherEntity.id} key={otherEntity.id}>
-                          {otherEntity.name}
+                          {otherEntity.id}
                         </option>
                       ))
                     : null}

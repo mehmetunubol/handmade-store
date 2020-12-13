@@ -165,19 +165,6 @@ export const UserAddressUpdate = (props: IUserAddressUpdateProps) => {
                 </AvInput>
                 <AvFeedback>This field is required.</AvFeedback>
               </AvGroup>
-              <AvGroup>
-                <Label for="user-address-cart">Cart</Label>
-                <AvInput id="user-address-cart" type="select" className="form-control" name="cart.id">
-                  <option value="" key="0" />
-                  {carts
-                    ? carts.map(otherEntity => (
-                        <option value={otherEntity.id} key={otherEntity.id}>
-                          {otherEntity.id}
-                        </option>
-                      ))
-                    : null}
-                </AvInput>
-              </AvGroup>
               <Button tag={Link} id="cancel-save" to="/user-address" replace color="info">
                 <FontAwesomeIcon icon="arrow-left" />
                 &nbsp;

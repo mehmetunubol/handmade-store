@@ -24,16 +24,21 @@
   ],
   "relationships": [
     {
-      "relationshipType": "one-to-many",
+      "relationshipType": "many-to-many",
       "otherEntityName": "productCategory",
       "otherEntityRelationshipName": "product",
-      "relationshipName": "productCategory"
+      "relationshipValidateRules": "required",
+      "relationshipName": "productCategory",
+      "otherEntityField": "id",
+      "ownerSide": true
     },
     {
-      "relationshipType": "one-to-many",
+      "relationshipType": "many-to-many",
       "otherEntityName": "attribute",
       "otherEntityRelationshipName": "product",
-      "relationshipName": "attribute"
+      "relationshipName": "attribute",
+      "otherEntityField": "id",
+      "ownerSide": true
     }
   ],
   "changelogDate": "20201213183359",

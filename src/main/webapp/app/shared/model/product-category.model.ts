@@ -4,11 +4,10 @@ export interface IProductCategory {
   id?: number;
   name?: string;
   description?: string;
+  parent?: number;
   imageContentType?: string;
   image?: any;
-  parents?: IProductCategory[];
-  productCategory?: IProductCategory;
-  product?: IProduct;
+  products?: IProduct[];
 }
 
 export const defaultValue: Readonly<IProductCategory> = {};

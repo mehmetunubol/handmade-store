@@ -54,6 +54,28 @@ export const ProductDetail = (props: IProductDetailProps) => {
               </div>
             ) : null}
           </dd>
+          <dt>Product Category</dt>
+          <dd>
+            {productEntity.productCategories
+              ? productEntity.productCategories.map((val, i) => (
+                  <span key={val.id}>
+                    <a>{val.id}</a>
+                    {productEntity.productCategories && i === productEntity.productCategories.length - 1 ? '' : ', '}
+                  </span>
+                ))
+              : null}
+          </dd>
+          <dt>Attribute</dt>
+          <dd>
+            {productEntity.attributes
+              ? productEntity.attributes.map((val, i) => (
+                  <span key={val.id}>
+                    <a>{val.id}</a>
+                    {productEntity.attributes && i === productEntity.attributes.length - 1 ? '' : ', '}
+                  </span>
+                ))
+              : null}
+          </dd>
         </dl>
         <Button tag={Link} to="/product" replace color="info">
           <FontAwesomeIcon icon="arrow-left" /> <span className="d-none d-md-inline">Back</span>

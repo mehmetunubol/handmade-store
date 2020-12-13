@@ -51,18 +51,21 @@ public class CacheConfiguration {
             createCache(cm, com.unubol.demo.store.domain.ClientDetails.class.getName());
             createCache(cm, com.unubol.demo.store.domain.ClientDetails.class.getName() + ".carts");
             createCache(cm, com.unubol.demo.store.domain.UserAddress.class.getName());
+            createCache(cm, com.unubol.demo.store.domain.UserAddress.class.getName() + ".carts");
             createCache(cm, com.unubol.demo.store.domain.Cart.class.getName());
-            createCache(cm, com.unubol.demo.store.domain.Cart.class.getName() + ".addresses");
             createCache(cm, com.unubol.demo.store.domain.Cart.class.getName() + ".orders");
+            createCache(cm, com.unubol.demo.store.domain.Cart.class.getName() + ".addresses");
+            createCache(cm, com.unubol.demo.store.domain.Cart.class.getName() + ".clientDetails");
             createCache(cm, com.unubol.demo.store.domain.OrderItems.class.getName());
             createCache(cm, com.unubol.demo.store.domain.Product.class.getName());
             createCache(cm, com.unubol.demo.store.domain.Product.class.getName() + ".productCategories");
             createCache(cm, com.unubol.demo.store.domain.Product.class.getName() + ".attributes");
             createCache(cm, com.unubol.demo.store.domain.Attribute.class.getName());
             createCache(cm, com.unubol.demo.store.domain.Attribute.class.getName() + ".attributeValues");
+            createCache(cm, com.unubol.demo.store.domain.Attribute.class.getName() + ".products");
             createCache(cm, com.unubol.demo.store.domain.AttributeValues.class.getName());
             createCache(cm, com.unubol.demo.store.domain.ProductCategory.class.getName());
-            createCache(cm, com.unubol.demo.store.domain.ProductCategory.class.getName() + ".parents");
+            createCache(cm, com.unubol.demo.store.domain.ProductCategory.class.getName() + ".products");
             // jhipster-needle-ehcache-add-entry
         };
     }

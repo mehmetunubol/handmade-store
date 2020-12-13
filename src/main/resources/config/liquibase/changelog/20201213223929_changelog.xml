@@ -1,0 +1,204 @@
+<?xml version="1.1" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext" xmlns:pro="http://www.liquibase.org/xml/ns/pro" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd http://www.liquibase.org/xml/ns/pro http://www.liquibase.org/xml/ns/pro/liquibase-pro-3.9.xsd http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.9.xsd">
+    <changeSet author="mehme (generated)" id="1607888375998-1">
+        <createTable tableName="attribute">
+            <column autoIncrement="true" name="id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="attributePK"/>
+            </column>
+            <column name="image" type="BLOB"/>
+            <column name="image_content_type" type="VARCHAR(255)"/>
+            <column name="name" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet author="mehme (generated)" id="1607888375998-2">
+        <createTable tableName="attribute_values">
+            <column autoIncrement="true" name="id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="attribute_valuesPK"/>
+            </column>
+            <column name="price" type="DECIMAL(21, 2)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="value" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="attribute_id" type="BIGINT"/>
+        </createTable>
+    </changeSet>
+    <changeSet author="mehme (generated)" id="1607888375998-3">
+        <createTable tableName="cart">
+            <column autoIncrement="true" name="id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="cartPK"/>
+            </column>
+            <column name="notes" type="VARCHAR(255)"/>
+            <column name="payment_method" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="placed_date" type="TIMESTAMP">
+                <constraints nullable="false"/>
+            </column>
+            <column name="status" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="total_price" type="DECIMAL(21, 2)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet author="mehme (generated)" id="1607888375998-4">
+        <createTable tableName="cart_address">
+            <column name="cart_id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+            <column name="address_id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet author="mehme (generated)" id="1607888375998-5">
+        <createTable tableName="client_details_cart">
+            <column name="client_details_id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+            <column name="cart_id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet author="mehme (generated)" id="1607888375998-6">
+        <createTable tableName="order_items">
+            <column autoIncrement="true" name="id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="order_itemsPK"/>
+            </column>
+            <column name="price" type="DECIMAL(21, 2)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="quantity" type="INT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="cart_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="product_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet author="mehme (generated)" id="1607888375998-7">
+        <createTable tableName="product">
+            <column autoIncrement="true" name="id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="productPK"/>
+            </column>
+            <column name="description" type="VARCHAR(255)"/>
+            <column name="image" type="BLOB"/>
+            <column name="image_content_type" type="VARCHAR(255)"/>
+            <column name="name" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="price" type="DECIMAL(21, 2)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet author="mehme (generated)" id="1607888375998-8">
+        <createTable tableName="product_attribute">
+            <column name="product_id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+            <column name="attribute_id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet author="mehme (generated)" id="1607888375998-9">
+        <createTable tableName="product_category">
+            <column autoIncrement="true" name="id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="product_categoryPK"/>
+            </column>
+            <column name="description" type="VARCHAR(255)"/>
+            <column name="image" type="BLOB"/>
+            <column name="image_content_type" type="VARCHAR(255)"/>
+            <column name="name" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="parent" type="INT">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet author="mehme (generated)" id="1607888375998-10">
+        <createTable tableName="product_product_category">
+            <column name="product_id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+            <column name="product_category_id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet author="mehme (generated)" id="1607888375998-11">
+        <createTable tableName="user_address">
+            <column autoIncrement="true" name="id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="user_addressPK"/>
+            </column>
+            <column name="city" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="country" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="detail" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="name" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="type" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="client_details_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet author="mehme (generated)" id="1607888375998-12">
+        <addForeignKeyConstraint baseColumnNames="user_id" baseTableName="client_details" constraintName="FK4l8s0naqwypsihb868v5hr948" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="jhi_user" validate="true"/>
+    </changeSet>
+    <changeSet author="mehme (generated)" id="1607888375998-13">
+        <addForeignKeyConstraint baseColumnNames="product_category_id" baseTableName="product_product_category" constraintName="FK4tfhmrvk7up4pr3g66qevssp3" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="product_category" validate="true"/>
+    </changeSet>
+    <changeSet author="mehme (generated)" id="1607888375998-14">
+        <addForeignKeyConstraint baseColumnNames="attribute_id" baseTableName="attribute_values" constraintName="FK64qm5m33k071t0hggr041a60t" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="attribute" validate="true"/>
+    </changeSet>
+    <changeSet author="mehme (generated)" id="1607888375998-15">
+        <addForeignKeyConstraint baseColumnNames="client_details_id" baseTableName="client_details_cart" constraintName="FKcdt0rfvb2xlc0kixm7uwhm0rb" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="client_details" validate="true"/>
+    </changeSet>
+    <changeSet author="mehme (generated)" id="1607888375998-16">
+        <addForeignKeyConstraint baseColumnNames="product_id" baseTableName="product_product_category" constraintName="FKcqsdes23dnnpy72dg9c9ksn0a" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="product" validate="true"/>
+    </changeSet>
+    <changeSet author="mehme (generated)" id="1607888375998-17">
+        <addForeignKeyConstraint baseColumnNames="attribute_id" baseTableName="product_attribute" constraintName="FKefc9famxhv98xs6686269a79" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="attribute" validate="true"/>
+    </changeSet>
+    <changeSet author="mehme (generated)" id="1607888375998-18">
+        <addForeignKeyConstraint baseColumnNames="address_id" baseTableName="cart_address" constraintName="FKf9q1ye7w40i1n5fri29i1nhyy" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="user_address" validate="true"/>
+    </changeSet>
+    <changeSet author="mehme (generated)" id="1607888375998-19">
+        <addForeignKeyConstraint baseColumnNames="cart_id" baseTableName="client_details_cart" constraintName="FKfl3ninfewyqd3uontb5lk4svt" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="cart" validate="true"/>
+    </changeSet>
+    <changeSet author="mehme (generated)" id="1607888375998-20">
+        <addForeignKeyConstraint baseColumnNames="cart_id" baseTableName="cart_address" constraintName="FKgqpxuvjfjei4s9i6rmniikt0u" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="cart" validate="true"/>
+    </changeSet>
+    <changeSet author="mehme (generated)" id="1607888375998-21">
+        <addForeignKeyConstraint baseColumnNames="product_id" baseTableName="product_attribute" constraintName="FKlefs59y5kmsbu017n1wp10gf2" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="product" validate="true"/>
+    </changeSet>
+    <changeSet author="mehme (generated)" id="1607888375998-22">
+        <addForeignKeyConstraint baseColumnNames="product_id" baseTableName="order_items" constraintName="FKlf6f9q956mt144wiv6p1yko16" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="product" validate="true"/>
+    </changeSet>
+    <changeSet author="mehme (generated)" id="1607888375998-23">
+        <addForeignKeyConstraint baseColumnNames="cart_id" baseTableName="order_items" constraintName="FKrsts10uv0muhucsb6wnkxohi7" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="cart" validate="true"/>
+    </changeSet>
+    <changeSet author="mehme (generated)" id="1607888375998-24">
+        <addForeignKeyConstraint baseColumnNames="client_details_id" baseTableName="user_address" constraintName="FKsceaac7pm4onfdt6gm4qv294m" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="client_details" validate="true"/>
+    </changeSet>
+</databaseChangeLog>

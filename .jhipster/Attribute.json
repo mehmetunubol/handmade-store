@@ -20,11 +20,13 @@
       "relationshipName": "attributeValues"
     },
     {
-      "relationshipType": "many-to-one",
+      "relationshipType": "many-to-many",
       "otherEntityName": "product",
       "otherEntityRelationshipName": "attribute",
+      "relationshipValidateRules": "required",
       "relationshipName": "product",
-      "otherEntityField": "id"
+      "otherEntityField": "id",
+      "ownerSide": false
     }
   ],
   "changelogDate": "20201213183459",

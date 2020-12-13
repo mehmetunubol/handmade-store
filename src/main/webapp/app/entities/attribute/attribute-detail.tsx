@@ -46,8 +46,6 @@ export const AttributeDetail = (props: IAttributeDetailProps) => {
               </div>
             ) : null}
           </dd>
-          <dt>Product</dt>
-          <dd>{attributeEntity.product ? attributeEntity.product.id : ''}</dd>
         </dl>
         <Button tag={Link} to="/attribute" replace color="info">
           <FontAwesomeIcon icon="arrow-left" /> <span className="d-none d-md-inline">Back</span>

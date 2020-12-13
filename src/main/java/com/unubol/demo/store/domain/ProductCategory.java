@@ -1,6 +1,6 @@
 package com.unubol.demo.store.domain;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 
@@ -32,6 +32,10 @@ public class ProductCategory implements Serializable {
     @Column(name = "description")
     private String description;
 
+    @NotNull
+    @Column(name = "parent", nullable = false)
+    private Integer parent;
+
     @Lob
     @Column(name = "image")
     private byte[] image;
@@ -39,17 +43,10 @@ public class ProductCategory implements Serializable {
     @Column(name = "image_content_type")
     private String imageContentType;
 
-    @OneToMany(mappedBy = "productCategory")
+    @ManyToMany(mappedBy = "productCategories")
     @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
-    private Set<ProductCategory> parents = new HashSet<>();
-
-    @ManyToOne
-    @JsonIgnoreProperties(value = "parents", allowSetters = true)
-    private ProductCategory productCategory;
-
-    @ManyToOne
-    @JsonIgnoreProperties(value = "productCategories", allowSetters = true)
-    private Product product;
+    @JsonIgnore
+    private Set<Product> products = new HashSet<>();
 
     // jhipster-needle-entity-add-field - JHipster will add fields here
     public Long getId() {
@@ -86,6 +83,19 @@ public class ProductCategory implements Serializable {
         this.description = description;
     }
 
+    public Integer getParent() {
+        return parent;
+    }
+
+    public ProductCategory parent(Integer parent) {
+        this.parent = parent;
+        return this;
+    }
+
+    public void setParent(Integer parent) {
+        this.parent = parent;
+    }
+
     public byte[] getImage() {
         return image;
     }
@@ -112,55 +122,29 @@ public class ProductCategory implements Serializable {
         this.imageContentType = imageContentType;
     }
 
-    public Set<ProductCategory> getParents() {
-        return parents;
+    public Set<Product> getProducts() {
+        return products;
     }
 
-    public ProductCategory parents(Set<ProductCategory> productCategories) {
-        this.parents = productCategories;
+    public ProductCategory products(Set<Product> products) {
+        this.products = products;
         return this;
     }
 
-    public ProductCategory addParent(ProductCategory productCategory) {
-        this.parents.add(productCategory);
-        productCategory.setProductCategory(this);
+    public ProductCategory addProduct(Product product) {
+        this.products.add(product);
+        product.getProductCategories().add(this);
         return this;
     }
 
-    public ProductCategory removeParent(ProductCategory productCategory) {
-        this.parents.remove(productCategory);
-        productCategory.setProductCategory(null);
+    public ProductCategory removeProduct(Product product) {
+        this.products.remove(product);
+        product.getProductCategories().remove(this);
         return this;
     }
 
-    public void setParents(Set<ProductCategory> productCategories) {
-        this.parents = productCategories;
-    }
-
-    public ProductCategory getProductCategory() {
-        return productCategory;
-    }
-
-    public ProductCategory productCategory(ProductCategory productCategory) {
-        this.productCategory = productCategory;
-        return this;
-    }
-
-    public void setProductCategory(ProductCategory productCategory) {
-        this.productCategory = productCategory;
-    }
-
-    public Product getProduct() {
-        return product;
-    }
-
-    public ProductCategory product(Product product) {
-        this.product = product;
-        return this;
-    }
-
-    public void setProduct(Product product) {
-        this.product = product;
+    public void setProducts(Set<Product> products) {
+        this.products = products;
     }
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here
 
@@ -187,6 +171,7 @@ public class ProductCategory implements Serializable {
             "id=" + getId() +
             ", name='" + getName() + "'" +
             ", description='" + getDescription() + "'" +
+            ", parent=" + getParent() +
             ", image='" + getImage() + "'" +
             ", imageContentType='" + getImageContentType() + "'" +
             "}";

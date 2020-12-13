@@ -34,6 +34,10 @@ export const ProductCategoryDetail = (props: IProductCategoryDetailProps) => {
           </dt>
           <dd>{productCategoryEntity.description}</dd>
           <dt>
+            <span id="parent">Parent</span>
+          </dt>
+          <dd>{productCategoryEntity.parent}</dd>
+          <dt>
             <span id="image">Image</span>
           </dt>
           <dd>
@@ -53,10 +57,6 @@ export const ProductCategoryDetail = (props: IProductCategoryDetailProps) => {
               </div>
             ) : null}
           </dd>
-          <dt>Product Category</dt>
-          <dd>{productCategoryEntity.productCategory ? productCategoryEntity.productCategory.id : ''}</dd>
-          <dt>Product</dt>
-          <dd>{productCategoryEntity.product ? productCategoryEntity.product.id : ''}</dd>
         </dl>
         <Button tag={Link} to="/product-category" replace color="info">
           <FontAwesomeIcon icon="arrow-left" /> <span className="d-none d-md-inline">Back</span>

@@ -97,9 +97,6 @@ export const Cart = (props: ICartProps) => {
                 <th className="hand" onClick={sort('paymentMethod')}>
                   Payment Method <FontAwesomeIcon icon="sort" />
                 </th>
-                <th>
-                  Client Details <FontAwesomeIcon icon="sort" />
-                </th>
                 <th />
               </tr>
             </thead>
@@ -116,7 +113,6 @@ export const Cart = (props: ICartProps) => {
                   <td>{cart.status}</td>
                   <td>{cart.totalPrice}</td>
                   <td>{cart.paymentMethod}</td>
-                  <td>{cart.clientDetails ? <Link to={`client-details/${cart.clientDetails.id}`}>{cart.clientDetails.id}</Link> : ''}</td>
                   <td className="text-right">
                     <div className="btn-group flex-btn-group-container">
                       <Button tag={Link} to={`${match.url}/${cart.id}`} color="info" size="sm">

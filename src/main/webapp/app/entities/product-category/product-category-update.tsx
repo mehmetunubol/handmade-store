@@ -7,7 +7,6 @@ import { ICrudGetAction, ICrudGetAllAction, setFileData, openFile, byteSize, ICr
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { IRootState } from 'app/shared/reducers';
 
-import { getEntities as getProductCategories } from 'app/entities/product-category/product-category.reducer';
 import { IProduct } from 'app/shared/model/product.model';
 import { getEntities as getProducts } from 'app/entities/product/product.reducer';
 import { getEntity, updateEntity, createEntity, setBlob, reset } from './product-category.reducer';
@@ -18,12 +17,10 @@ import { mapIdList } from 'app/shared/util/entity-utils';
 export interface IProductCategoryUpdateProps extends StateProps, DispatchProps, RouteComponentProps<{ id: string }> {}
 
 export const ProductCategoryUpdate = (props: IProductCategoryUpdateProps) => {
-  const [parentId, setParentId] = useState('0');
-  const [productCategoryId, setProductCategoryId] = useState('0');
   const [productId, setProductId] = useState('0');
   const [isNew, setIsNew] = useState(!props.match.params || !props.match.params.id);
 
-  const { productCategoryEntity, productCategories, products, loading, updating } = props;
+  const { productCategoryEntity, products, loading, updating } = props;
 
   const { image, imageContentType } = productCategoryEntity;
 
@@ -38,7 +35,6 @@ export const ProductCategoryUpdate = (props: IProductCategoryUpdateProps) => {
       props.getEntity(props.match.params.id);
     }
 
-    props.getProductCategories();
     props.getProducts();
   }, []);
 
@@ -110,6 +106,21 @@ export const ProductCategoryUpdate = (props: IProductCategoryUpdateProps) => {
                 <AvField id="product-category-description" type="text" name="description" />
               </AvGroup>
               <AvGroup>
+                <Label id="parentLabel" for="product-category-parent">
+                  Parent
+                </Label>
+                <AvField
+                  id="product-category-parent"
+                  type="string"
+                  className="form-control"
+                  name="parent"
+                  validate={{
+                    required: { value: true, errorMessage: 'This field is required.' },
+                    number: { value: true, errorMessage: 'This field should be a number.' },
+                  }}
+                />
+              </AvGroup>
+              <AvGroup>
                 <AvGroup>
                   <Label id="imageLabel" for="image">
                     Image
@@ -141,32 +152,6 @@ export const ProductCategoryUpdate = (props: IProductCategoryUpdateProps) => {
                   <AvInput type="hidden" name="image" value={image} />
                 </AvGroup>
               </AvGroup>
-              <AvGroup>
-                <Label for="product-category-productCategory">Product Category</Label>
-                <AvInput id="product-category-productCategory" type="select" className="form-control" name="productCategory.id">
-                  <option value="" key="0" />
-                  {productCategories
-                    ? productCategories.map(otherEntity => (
-                        <option value={otherEntity.id} key={otherEntity.id}>
-                          {otherEntity.id}
-                        </option>
-                      ))
-                    : null}
-                </AvInput>
-              </AvGroup>
-              <AvGroup>
-                <Label for="product-category-product">Product</Label>
-                <AvInput id="product-category-product" type="select" className="form-control" name="product.id">
-                  <option value="" key="0" />
-                  {products
-                    ? products.map(otherEntity => (
-                        <option value={otherEntity.id} key={otherEntity.id}>
-                          {otherEntity.id}
-                        </option>
-                      ))
-                    : null}
-                </AvInput>
-              </AvGroup>
               <Button tag={Link} id="cancel-save" to="/product-category" replace color="info">
                 <FontAwesomeIcon icon="arrow-left" />
                 &nbsp;
@@ -186,7 +171,6 @@ export const ProductCategoryUpdate = (props: IProductCategoryUpdateProps) => {
 };
 
 const mapStateToProps = (storeState: IRootState) => ({
-  productCategories: storeState.productCategory.entities,
   products: storeState.product.entities,
   productCategoryEntity: storeState.productCategory.entity,
   loading: storeState.productCategory.loading,
@@ -195,7 +179,6 @@ const mapStateToProps = (storeState: IRootState) => ({
 });
 
 const mapDispatchToProps = {
-  getProductCategories,
   getProducts,
   getEntity,
   updateEntity,

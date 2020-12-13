@@ -8,9 +8,14 @@ import com.unubol.demo.store.service.CartService;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mock;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
@@ -19,10 +24,12 @@ import javax.persistence.EntityManager;
 import java.math.BigDecimal;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
+import java.util.ArrayList;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.hasItem;
+import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
@@ -32,6 +39,7 @@ import com.unubol.demo.store.domain.enumeration.PaymentMethod;
  * Integration tests for the {@link CartResource} REST controller.
  */
 @SpringBootTest(classes = StoreApp.class)
+@ExtendWith(MockitoExtension.class)
 @AutoConfigureMockMvc
 @WithMockUser
 public class CartResourceIT {
@@ -53,6 +61,12 @@ public class CartResourceIT {
 
     @Autowired
     private CartRepository cartRepository;
+
+    @Mock
+    private CartRepository cartRepositoryMock;
+
+    @Mock
+    private CartService cartServiceMock;
 
     @Autowired
     private CartService cartService;
@@ -256,6 +270,26 @@ public class CartResourceIT {
             .andExpect(jsonPath("$.[*].paymentMethod").value(hasItem(DEFAULT_PAYMENT_METHOD.toString())));
     }
     
+    @SuppressWarnings({"unchecked"})
+    public void getAllCartsWithEagerRelationshipsIsEnabled() throws Exception {
+        when(cartServiceMock.findAllWithEagerRelationships(any())).thenReturn(new PageImpl(new ArrayList<>()));
+
+        restCartMockMvc.perform(get("/api/carts?eagerload=true"))
+            .andExpect(status().isOk());
+
+        verify(cartServiceMock, times(1)).findAllWithEagerRelationships(any());
+    }
+
+    @SuppressWarnings({"unchecked"})
+    public void getAllCartsWithEagerRelationshipsIsNotEnabled() throws Exception {
+        when(cartServiceMock.findAllWithEagerRelationships(any())).thenReturn(new PageImpl(new ArrayList<>()));
+
+        restCartMockMvc.perform(get("/api/carts?eagerload=true"))
+            .andExpect(status().isOk());
+
+        verify(cartServiceMock, times(1)).findAllWithEagerRelationships(any());
+    }
+
     @Test
     @Transactional
     public void getCart() throws Exception {

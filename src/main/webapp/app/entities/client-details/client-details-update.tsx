@@ -9,6 +9,8 @@ import { IRootState } from 'app/shared/reducers';
 
 import { IUser } from 'app/shared/model/user.model';
 import { getUsers } from 'app/modules/administration/user-management/user-management.reducer';
+import { ICart } from 'app/shared/model/cart.model';
+import { getEntities as getCarts } from 'app/entities/cart/cart.reducer';
 import { getEntity, updateEntity, createEntity, reset } from './client-details.reducer';
 import { IClientDetails } from 'app/shared/model/client-details.model';
 import { convertDateTimeFromServer, convertDateTimeToServer, displayDefaultDateTime } from 'app/shared/util/date-utils';
@@ -17,10 +19,11 @@ import { mapIdList } from 'app/shared/util/entity-utils';
 export interface IClientDetailsUpdateProps extends StateProps, DispatchProps, RouteComponentProps<{ id: string }> {}
 
 export const ClientDetailsUpdate = (props: IClientDetailsUpdateProps) => {
+  const [idscart, setIdscart] = useState([]);
   const [userId, setUserId] = useState('0');
   const [isNew, setIsNew] = useState(!props.match.params || !props.match.params.id);
 
-  const { clientDetailsEntity, users, loading, updating } = props;
+  const { clientDetailsEntity, users, carts, loading, updating } = props;
 
   const handleClose = () => {
     props.history.push('/client-details' + props.location.search);
@@ -34,6 +37,7 @@ export const ClientDetailsUpdate = (props: IClientDetailsUpdateProps) => {
     }
 
     props.getUsers();
+    props.getCarts();
   }, []);
 
   useEffect(() => {
@@ -47,6 +51,7 @@ export const ClientDetailsUpdate = (props: IClientDetailsUpdateProps) => {
       const entity = {
         ...clientDetailsEntity,
         ...values,
+        carts: mapIdList(values.carts),
       };
 
       if (isNew) {
@@ -151,6 +156,26 @@ export const ClientDetailsUpdate = (props: IClientDetailsUpdateProps) => {
                 </AvInput>
                 <AvFeedback>This field is required.</AvFeedback>
               </AvGroup>
+              <AvGroup>
+                <Label for="client-details-cart">Cart</Label>
+                <AvInput
+                  id="client-details-cart"
+                  type="select"
+                  multiple
+                  className="form-control"
+                  name="carts"
+                  value={clientDetailsEntity.carts && clientDetailsEntity.carts.map(e => e.id)}
+                >
+                  <option value="" key="0" />
+                  {carts
+                    ? carts.map(otherEntity => (
+                        <option value={otherEntity.id} key={otherEntity.id}>
+                          {otherEntity.id}
+                        </option>
+                      ))
+                    : null}
+                </AvInput>
+              </AvGroup>
               <Button tag={Link} id="cancel-save" to="/client-details" replace color="info">
                 <FontAwesomeIcon icon="arrow-left" />
                 &nbsp;
@@ -171,6 +196,7 @@ export const ClientDetailsUpdate = (props: IClientDetailsUpdateProps) => {
 
 const mapStateToProps = (storeState: IRootState) => ({
   users: storeState.userManagement.users,
+  carts: storeState.cart.entities,
   clientDetailsEntity: storeState.clientDetails.entity,
   loading: storeState.clientDetails.loading,
   updating: storeState.clientDetails.updating,
@@ -179,6 +205,7 @@ const mapStateToProps = (storeState: IRootState) => ({
 
 const mapDispatchToProps = {
   getUsers,
+  getCarts,
   getEntity,
   updateEntity,
   createEntity,

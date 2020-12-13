@@ -1,6 +1,6 @@
 package com.unubol.demo.store.domain;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 
@@ -40,9 +40,10 @@ public class Attribute implements Serializable {
     @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
     private Set<AttributeValues> attributeValues = new HashSet<>();
 
-    @ManyToOne
-    @JsonIgnoreProperties(value = "attributes", allowSetters = true)
-    private Product product;
+    @ManyToMany(mappedBy = "attributes")
+    @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
+    @JsonIgnore
+    private Set<Product> products = new HashSet<>();
 
     // jhipster-needle-entity-add-field - JHipster will add fields here
     public Long getId() {
@@ -117,17 +118,29 @@ public class Attribute implements Serializable {
         this.attributeValues = attributeValues;
     }
 
-    public Product getProduct() {
-        return product;
+    public Set<Product> getProducts() {
+        return products;
     }
 
-    public Attribute product(Product product) {
-        this.product = product;
+    public Attribute products(Set<Product> products) {
+        this.products = products;
         return this;
     }
 
-    public void setProduct(Product product) {
-        this.product = product;
+    public Attribute addProduct(Product product) {
+        this.products.add(product);
+        product.getAttributes().add(this);
+        return this;
+    }
+
+    public Attribute removeProduct(Product product) {
+        this.products.remove(product);
+        product.getAttributes().remove(this);
+        return this;
+    }
+
+    public void setProducts(Set<Product> products) {
+        this.products = products;
     }
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here
 

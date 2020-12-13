@@ -37,6 +37,9 @@ public class ProductCategoryResourceIT {
     private static final String DEFAULT_DESCRIPTION = "AAAAAAAAAA";
     private static final String UPDATED_DESCRIPTION = "BBBBBBBBBB";
 
+    private static final Integer DEFAULT_PARENT = 1;
+    private static final Integer UPDATED_PARENT = 2;
+
     private static final byte[] DEFAULT_IMAGE = TestUtil.createByteArray(1, "0");
     private static final byte[] UPDATED_IMAGE = TestUtil.createByteArray(1, "1");
     private static final String DEFAULT_IMAGE_CONTENT_TYPE = "image/jpg";
@@ -66,6 +69,7 @@ public class ProductCategoryResourceIT {
         ProductCategory productCategory = new ProductCategory()
             .name(DEFAULT_NAME)
             .description(DEFAULT_DESCRIPTION)
+            .parent(DEFAULT_PARENT)
             .image(DEFAULT_IMAGE)
             .imageContentType(DEFAULT_IMAGE_CONTENT_TYPE);
         return productCategory;
@@ -80,6 +84,7 @@ public class ProductCategoryResourceIT {
         ProductCategory productCategory = new ProductCategory()
             .name(UPDATED_NAME)
             .description(UPDATED_DESCRIPTION)
+            .parent(UPDATED_PARENT)
             .image(UPDATED_IMAGE)
             .imageContentType(UPDATED_IMAGE_CONTENT_TYPE);
         return productCategory;
@@ -106,6 +111,7 @@ public class ProductCategoryResourceIT {
         ProductCategory testProductCategory = productCategoryList.get(productCategoryList.size() - 1);
         assertThat(testProductCategory.getName()).isEqualTo(DEFAULT_NAME);
         assertThat(testProductCategory.getDescription()).isEqualTo(DEFAULT_DESCRIPTION);
+        assertThat(testProductCategory.getParent()).isEqualTo(DEFAULT_PARENT);
         assertThat(testProductCategory.getImage()).isEqualTo(DEFAULT_IMAGE);
         assertThat(testProductCategory.getImageContentType()).isEqualTo(DEFAULT_IMAGE_CONTENT_TYPE);
     }
@@ -151,6 +157,25 @@ public class ProductCategoryResourceIT {
 
     @Test
     @Transactional
+    public void checkParentIsRequired() throws Exception {
+        int databaseSizeBeforeTest = productCategoryRepository.findAll().size();
+        // set the field null
+        productCategory.setParent(null);
+
+        // Create the ProductCategory, which fails.
+
+
+        restProductCategoryMockMvc.perform(post("/api/product-categories")
+            .contentType(MediaType.APPLICATION_JSON)
+            .content(TestUtil.convertObjectToJsonBytes(productCategory)))
+            .andExpect(status().isBadRequest());
+
+        List<ProductCategory> productCategoryList = productCategoryRepository.findAll();
+        assertThat(productCategoryList).hasSize(databaseSizeBeforeTest);
+    }
+
+    @Test
+    @Transactional
     public void getAllProductCategories() throws Exception {
         // Initialize the database
         productCategoryRepository.saveAndFlush(productCategory);
@@ -162,6 +187,7 @@ public class ProductCategoryResourceIT {
             .andExpect(jsonPath("$.[*].id").value(hasItem(productCategory.getId().intValue())))
             .andExpect(jsonPath("$.[*].name").value(hasItem(DEFAULT_NAME)))
             .andExpect(jsonPath("$.[*].description").value(hasItem(DEFAULT_DESCRIPTION)))
+            .andExpect(jsonPath("$.[*].parent").value(hasItem(DEFAULT_PARENT)))
             .andExpect(jsonPath("$.[*].imageContentType").value(hasItem(DEFAULT_IMAGE_CONTENT_TYPE)))
             .andExpect(jsonPath("$.[*].image").value(hasItem(Base64Utils.encodeToString(DEFAULT_IMAGE))));
     }
@@ -179,6 +205,7 @@ public class ProductCategoryResourceIT {
             .andExpect(jsonPath("$.id").value(productCategory.getId().intValue()))
             .andExpect(jsonPath("$.name").value(DEFAULT_NAME))
             .andExpect(jsonPath("$.description").value(DEFAULT_DESCRIPTION))
+            .andExpect(jsonPath("$.parent").value(DEFAULT_PARENT))
             .andExpect(jsonPath("$.imageContentType").value(DEFAULT_IMAGE_CONTENT_TYPE))
             .andExpect(jsonPath("$.image").value(Base64Utils.encodeToString(DEFAULT_IMAGE)));
     }
@@ -205,6 +232,7 @@ public class ProductCategoryResourceIT {
         updatedProductCategory
             .name(UPDATED_NAME)
             .description(UPDATED_DESCRIPTION)
+            .parent(UPDATED_PARENT)
             .image(UPDATED_IMAGE)
             .imageContentType(UPDATED_IMAGE_CONTENT_TYPE);
 
@@ -219,6 +247,7 @@ public class ProductCategoryResourceIT {
         ProductCategory testProductCategory = productCategoryList.get(productCategoryList.size() - 1);
         assertThat(testProductCategory.getName()).isEqualTo(UPDATED_NAME);
         assertThat(testProductCategory.getDescription()).isEqualTo(UPDATED_DESCRIPTION);
+        assertThat(testProductCategory.getParent()).isEqualTo(UPDATED_PARENT);
         assertThat(testProductCategory.getImage()).isEqualTo(UPDATED_IMAGE);
         assertThat(testProductCategory.getImageContentType()).isEqualTo(UPDATED_IMAGE_CONTENT_TYPE);
     }

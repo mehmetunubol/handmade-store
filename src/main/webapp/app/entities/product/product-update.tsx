@@ -7,6 +7,10 @@ import { ICrudGetAction, ICrudGetAllAction, setFileData, openFile, byteSize, ICr
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { IRootState } from 'app/shared/reducers';
 
+import { IProductCategory } from 'app/shared/model/product-category.model';
+import { getEntities as getProductCategories } from 'app/entities/product-category/product-category.reducer';
+import { IAttribute } from 'app/shared/model/attribute.model';
+import { getEntities as getAttributes } from 'app/entities/attribute/attribute.reducer';
 import { getEntity, updateEntity, createEntity, setBlob, reset } from './product.reducer';
 import { IProduct } from 'app/shared/model/product.model';
 import { convertDateTimeFromServer, convertDateTimeToServer, displayDefaultDateTime } from 'app/shared/util/date-utils';
@@ -15,9 +19,11 @@ import { mapIdList } from 'app/shared/util/entity-utils';
 export interface IProductUpdateProps extends StateProps, DispatchProps, RouteComponentProps<{ id: string }> {}
 
 export const ProductUpdate = (props: IProductUpdateProps) => {
+  const [idsproductCategory, setIdsproductCategory] = useState([]);
+  const [idsattribute, setIdsattribute] = useState([]);
   const [isNew, setIsNew] = useState(!props.match.params || !props.match.params.id);
 
-  const { productEntity, loading, updating } = props;
+  const { productEntity, productCategories, attributes, loading, updating } = props;
 
   const { image, imageContentType } = productEntity;
 
@@ -31,6 +37,9 @@ export const ProductUpdate = (props: IProductUpdateProps) => {
     } else {
       props.getEntity(props.match.params.id);
     }
+
+    props.getProductCategories();
+    props.getAttributes();
   }, []);
 
   const onBlobChange = (isAnImage, name) => event => {
@@ -52,6 +61,8 @@ export const ProductUpdate = (props: IProductUpdateProps) => {
       const entity = {
         ...productEntity,
         ...values,
+        productCategories: mapIdList(values.productCategories),
+        attributes: mapIdList(values.attributes),
       };
 
       if (isNew) {
@@ -147,6 +158,46 @@ export const ProductUpdate = (props: IProductUpdateProps) => {
                   <AvInput type="hidden" name="image" value={image} />
                 </AvGroup>
               </AvGroup>
+              <AvGroup>
+                <Label for="product-productCategory">Product Category</Label>
+                <AvInput
+                  id="product-productCategory"
+                  type="select"
+                  multiple
+                  className="form-control"
+                  name="productCategories"
+                  value={productEntity.productCategories && productEntity.productCategories.map(e => e.id)}
+                >
+                  <option value="" key="0" />
+                  {productCategories
+                    ? productCategories.map(otherEntity => (
+                        <option value={otherEntity.id} key={otherEntity.id}>
+                          {otherEntity.id}
+                        </option>
+                      ))
+                    : null}
+                </AvInput>
+              </AvGroup>
+              <AvGroup>
+                <Label for="product-attribute">Attribute</Label>
+                <AvInput
+                  id="product-attribute"
+                  type="select"
+                  multiple
+                  className="form-control"
+                  name="attributes"
+                  value={productEntity.attributes && productEntity.attributes.map(e => e.id)}
+                >
+                  <option value="" key="0" />
+                  {attributes
+                    ? attributes.map(otherEntity => (
+                        <option value={otherEntity.id} key={otherEntity.id}>
+                          {otherEntity.id}
+                        </option>
+                      ))
+                    : null}
+                </AvInput>
+              </AvGroup>
               <Button tag={Link} id="cancel-save" to="/product" replace color="info">
                 <FontAwesomeIcon icon="arrow-left" />
                 &nbsp;
@@ -166,6 +217,8 @@ export const ProductUpdate = (props: IProductUpdateProps) => {
 };
 
 const mapStateToProps = (storeState: IRootState) => ({
+  productCategories: storeState.productCategory.entities,
+  attributes: storeState.attribute.entities,
   productEntity: storeState.product.entity,
   loading: storeState.product.loading,
   updating: storeState.product.updating,
@@ -173,6 +226,8 @@ const mapStateToProps = (storeState: IRootState) => ({
 });
 
 const mapDispatchToProps = {
+  getProductCategories,
+  getAttributes,
   getEntity,
   updateEntity,
   setBlob,

@@ -1,6 +1,6 @@
 package com.unubol.demo.store.domain;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 
@@ -55,15 +55,20 @@ public class Cart implements Serializable {
 
     @OneToMany(mappedBy = "cart")
     @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
-    private Set<UserAddress> addresses = new HashSet<>();
-
-    @OneToMany(mappedBy = "cart")
-    @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
     private Set<OrderItems> orders = new HashSet<>();
 
-    @ManyToOne
-    @JsonIgnoreProperties(value = "carts", allowSetters = true)
-    private ClientDetails clientDetails;
+    @ManyToMany
+    @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
+    @NotNull
+    @JoinTable(name = "cart_address",
+               joinColumns = @JoinColumn(name = "cart_id", referencedColumnName = "id"),
+               inverseJoinColumns = @JoinColumn(name = "address_id", referencedColumnName = "id"))
+    private Set<UserAddress> addresses = new HashSet<>();
+
+    @ManyToMany(mappedBy = "carts")
+    @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
+    @JsonIgnore
+    private Set<ClientDetails> clientDetails = new HashSet<>();
 
     // jhipster-needle-entity-add-field - JHipster will add fields here
     public Long getId() {
@@ -139,31 +144,6 @@ public class Cart implements Serializable {
         this.paymentMethod = paymentMethod;
     }
 
-    public Set<UserAddress> getAddresses() {
-        return addresses;
-    }
-
-    public Cart addresses(Set<UserAddress> userAddresses) {
-        this.addresses = userAddresses;
-        return this;
-    }
-
-    public Cart addAddress(UserAddress userAddress) {
-        this.addresses.add(userAddress);
-        userAddress.setCart(this);
-        return this;
-    }
-
-    public Cart removeAddress(UserAddress userAddress) {
-        this.addresses.remove(userAddress);
-        userAddress.setCart(null);
-        return this;
-    }
-
-    public void setAddresses(Set<UserAddress> userAddresses) {
-        this.addresses = userAddresses;
-    }
-
     public Set<OrderItems> getOrders() {
         return orders;
     }
@@ -189,16 +169,53 @@ public class Cart implements Serializable {
         this.orders = orderItems;
     }
 
-    public ClientDetails getClientDetails() {
+    public Set<UserAddress> getAddresses() {
+        return addresses;
+    }
+
+    public Cart addresses(Set<UserAddress> userAddresses) {
+        this.addresses = userAddresses;
+        return this;
+    }
+
+    public Cart addAddress(UserAddress userAddress) {
+        this.addresses.add(userAddress);
+        userAddress.getCarts().add(this);
+        return this;
+    }
+
+    public Cart removeAddress(UserAddress userAddress) {
+        this.addresses.remove(userAddress);
+        userAddress.getCarts().remove(this);
+        return this;
+    }
+
+    public void setAddresses(Set<UserAddress> userAddresses) {
+        this.addresses = userAddresses;
+    }
+
+    public Set<ClientDetails> getClientDetails() {
         return clientDetails;
     }
 
-    public Cart clientDetails(ClientDetails clientDetails) {
+    public Cart clientDetails(Set<ClientDetails> clientDetails) {
         this.clientDetails = clientDetails;
         return this;
     }
 
-    public void setClientDetails(ClientDetails clientDetails) {
+    public Cart addClientDetails(ClientDetails clientDetails) {
+        this.clientDetails.add(clientDetails);
+        clientDetails.getCarts().add(this);
+        return this;
+    }
+
+    public Cart removeClientDetails(ClientDetails clientDetails) {
+        this.clientDetails.remove(clientDetails);
+        clientDetails.getCarts().remove(this);
+        return this;
+    }
+
+    public void setClientDetails(Set<ClientDetails> clientDetails) {
         this.clientDetails = clientDetails;
     }
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here

@@ -9,7 +9,7 @@ export interface IUserAddress {
   city?: string;
   country?: string;
   clientDetails?: IClientDetails;
-  cart?: ICart;
+  carts?: ICart[];
 }
 
 export const defaultValue: Readonly<IUserAddress> = {};

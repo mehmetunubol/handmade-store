@@ -34,7 +34,7 @@ export const OrderItemsDetail = (props: IOrderItemsDetailProps) => {
           </dt>
           <dd>{orderItemsEntity.price}</dd>
           <dt>Product</dt>
-          <dd>{orderItemsEntity.product ? orderItemsEntity.product.name : ''}</dd>
+          <dd>{orderItemsEntity.product ? orderItemsEntity.product.id : ''}</dd>
           <dt>Cart</dt>
           <dd>{orderItemsEntity.cart ? orderItemsEntity.cart.id : ''}</dd>
         </dl>

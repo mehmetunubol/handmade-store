@@ -43,6 +43,17 @@ export const ClientDetailsDetail = (props: IClientDetailsDetailProps) => {
           <dd>{clientDetailsEntity.country}</dd>
           <dt>User</dt>
           <dd>{clientDetailsEntity.user ? clientDetailsEntity.user.login : ''}</dd>
+          <dt>Cart</dt>
+          <dd>
+            {clientDetailsEntity.carts
+              ? clientDetailsEntity.carts.map((val, i) => (
+                  <span key={val.id}>
+                    <a>{val.id}</a>
+                    {clientDetailsEntity.carts && i === clientDetailsEntity.carts.length - 1 ? '' : ', '}
+                  </span>
+                ))
+              : null}
+          </dd>
         </dl>
         <Button tag={Link} to="/client-details" replace color="info">
           <FontAwesomeIcon icon="arrow-left" /> <span className="d-none d-md-inline">Back</span>

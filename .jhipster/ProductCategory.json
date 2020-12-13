@@ -11,6 +11,11 @@
       "fieldType": "String"
     },
     {
+      "fieldName": "parent",
+      "fieldType": "Integer",
+      "fieldValidateRules": ["required"]
+    },
+    {
       "fieldName": "image",
       "fieldType": "byte[]",
       "fieldTypeBlobContent": "image"
@@ -18,24 +23,12 @@
   ],
   "relationships": [
     {
-      "relationshipType": "one-to-many",
-      "otherEntityName": "productCategory",
-      "otherEntityRelationshipName": "productCategory",
-      "relationshipName": "parent"
-    },
-    {
-      "relationshipType": "many-to-one",
-      "otherEntityName": "productCategory",
-      "otherEntityRelationshipName": "parent",
-      "relationshipName": "productCategory",
-      "otherEntityField": "id"
-    },
-    {
-      "relationshipType": "many-to-one",
+      "relationshipType": "many-to-many",
       "otherEntityName": "product",
       "otherEntityRelationshipName": "productCategory",
       "relationshipName": "product",
-      "otherEntityField": "id"
+      "otherEntityField": "id",
+      "ownerSide": false
     }
   ],
   "changelogDate": "20201213183659",

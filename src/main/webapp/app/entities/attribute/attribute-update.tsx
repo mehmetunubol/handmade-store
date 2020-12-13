@@ -131,19 +131,6 @@ export const AttributeUpdate = (props: IAttributeUpdateProps) => {
                   <AvInput type="hidden" name="image" value={image} />
                 </AvGroup>
               </AvGroup>
-              <AvGroup>
-                <Label for="attribute-product">Product</Label>
-                <AvInput id="attribute-product" type="select" className="form-control" name="product.id">
-                  <option value="" key="0" />
-                  {products
-                    ? products.map(otherEntity => (
-                        <option value={otherEntity.id} key={otherEntity.id}>
-                          {otherEntity.id}
-                        </option>
-                      ))
-                    : null}
-                </AvInput>
-              </AvGroup>
               <Button tag={Link} id="cancel-save" to="/attribute" replace color="info">
                 <FontAwesomeIcon icon="arrow-left" />
                 &nbsp;

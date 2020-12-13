@@ -88,9 +88,6 @@ export const Attribute = (props: IAttributeProps) => {
                 <th className="hand" onClick={sort('image')}>
                   Image <FontAwesomeIcon icon="sort" />
                 </th>
-                <th>
-                  Product <FontAwesomeIcon icon="sort" />
-                </th>
                 <th />
               </tr>
             </thead>
@@ -118,7 +115,6 @@ export const Attribute = (props: IAttributeProps) => {
                       </div>
                     ) : null}
                   </td>
-                  <td>{attribute.product ? <Link to={`product/${attribute.product.id}`}>{attribute.product.id}</Link> : ''}</td>
                   <td className="text-right">
                     <div className="btn-group flex-btn-group-container">
                       <Button tag={Link} to={`${match.url}/${attribute.id}`} color="info" size="sm">

@@ -7,7 +7,7 @@ export interface IAttribute {
   imageContentType?: string;
   image?: any;
   attributeValues?: IAttributeValues[];
-  product?: IProduct;
+  products?: IProduct[];
 }
 
 export const defaultValue: Readonly<IAttribute> = {};

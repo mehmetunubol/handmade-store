@@ -88,14 +88,11 @@ export const ProductCategory = (props: IProductCategoryProps) => {
                 <th className="hand" onClick={sort('description')}>
                   Description <FontAwesomeIcon icon="sort" />
                 </th>
+                <th className="hand" onClick={sort('parent')}>
+                  Parent <FontAwesomeIcon icon="sort" />
+                </th>
                 <th className="hand" onClick={sort('image')}>
                   Image <FontAwesomeIcon icon="sort" />
-                </th>
-                <th>
-                  Product Category <FontAwesomeIcon icon="sort" />
-                </th>
-                <th>
-                  Product <FontAwesomeIcon icon="sort" />
                 </th>
                 <th />
               </tr>
@@ -110,6 +107,7 @@ export const ProductCategory = (props: IProductCategoryProps) => {
                   </td>
                   <td>{productCategory.name}</td>
                   <td>{productCategory.description}</td>
+                  <td>{productCategory.parent}</td>
                   <td>
                     {productCategory.image ? (
                       <div>
@@ -127,16 +125,6 @@ export const ProductCategory = (props: IProductCategoryProps) => {
                         </span>
                       </div>
                     ) : null}
-                  </td>
-                  <td>
-                    {productCategory.productCategory ? (
-                      <Link to={`product-category/${productCategory.productCategory.id}`}>{productCategory.productCategory.id}</Link>
-                    ) : (
-                      ''
-                    )}
-                  </td>
-                  <td>
-                    {productCategory.product ? <Link to={`product/${productCategory.product.id}`}>{productCategory.product.id}</Link> : ''}
                   </td>
                   <td className="text-right">
                     <div className="btn-group flex-btn-group-container">

@@ -48,8 +48,12 @@ public class ClientDetails implements Serializable {
     @JoinColumn(unique = true)
     private User user;
 
-    @OneToMany(mappedBy = "clientDetails")
+    @ManyToMany
     @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
+    @NotNull
+    @JoinTable(name = "client_details_cart",
+               joinColumns = @JoinColumn(name = "client_details_id", referencedColumnName = "id"),
+               inverseJoinColumns = @JoinColumn(name = "cart_id", referencedColumnName = "id"))
     private Set<Cart> carts = new HashSet<>();
 
     // jhipster-needle-entity-add-field - JHipster will add fields here
@@ -137,13 +141,13 @@ public class ClientDetails implements Serializable {
 
     public ClientDetails addCart(Cart cart) {
         this.carts.add(cart);
-        cart.setClientDetails(this);
+        cart.getClientDetails().add(this);
         return this;
     }
 
     public ClientDetails removeCart(Cart cart) {
         this.carts.remove(cart);
-        cart.setClientDetails(null);
+        cart.getClientDetails().remove(this);
         return this;
     }
 

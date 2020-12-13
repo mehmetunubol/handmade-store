@@ -9,18 +9,25 @@ import com.unubol.demo.store.service.ClientDetailsService;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mock;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.transaction.annotation.Transactional;
 import javax.persistence.EntityManager;
+import java.util.ArrayList;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.hasItem;
+import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
@@ -29,6 +36,7 @@ import com.unubol.demo.store.domain.enumeration.Gender;
  * Integration tests for the {@link ClientDetailsResource} REST controller.
  */
 @SpringBootTest(classes = StoreApp.class)
+@ExtendWith(MockitoExtension.class)
 @AutoConfigureMockMvc
 @WithMockUser
 public class ClientDetailsResourceIT {
@@ -47,6 +55,12 @@ public class ClientDetailsResourceIT {
 
     @Autowired
     private ClientDetailsRepository clientDetailsRepository;
+
+    @Mock
+    private ClientDetailsRepository clientDetailsRepositoryMock;
+
+    @Mock
+    private ClientDetailsService clientDetailsServiceMock;
 
     @Autowired
     private ClientDetailsService clientDetailsService;
@@ -256,6 +270,26 @@ public class ClientDetailsResourceIT {
             .andExpect(jsonPath("$.[*].country").value(hasItem(DEFAULT_COUNTRY)));
     }
     
+    @SuppressWarnings({"unchecked"})
+    public void getAllClientDetailsWithEagerRelationshipsIsEnabled() throws Exception {
+        when(clientDetailsServiceMock.findAllWithEagerRelationships(any())).thenReturn(new PageImpl(new ArrayList<>()));
+
+        restClientDetailsMockMvc.perform(get("/api/client-details?eagerload=true"))
+            .andExpect(status().isOk());
+
+        verify(clientDetailsServiceMock, times(1)).findAllWithEagerRelationships(any());
+    }
+
+    @SuppressWarnings({"unchecked"})
+    public void getAllClientDetailsWithEagerRelationshipsIsNotEnabled() throws Exception {
+        when(clientDetailsServiceMock.findAllWithEagerRelationships(any())).thenReturn(new PageImpl(new ArrayList<>()));
+
+        restClientDetailsMockMvc.perform(get("/api/client-details?eagerload=true"))
+            .andExpect(status().isOk());
+
+        verify(clientDetailsServiceMock, times(1)).findAllWithEagerRelationships(any());
+    }
+
     @Test
     @Transactional
     public void getClientDetails() throws Exception {

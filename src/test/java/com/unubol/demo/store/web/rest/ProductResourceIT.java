@@ -2,14 +2,20 @@ package com.unubol.demo.store.web.rest;
 
 import com.unubol.demo.store.StoreApp;
 import com.unubol.demo.store.domain.Product;
+import com.unubol.demo.store.domain.ProductCategory;
 import com.unubol.demo.store.repository.ProductRepository;
 import com.unubol.demo.store.service.ProductService;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mock;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
@@ -17,10 +23,12 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Base64Utils;
 import javax.persistence.EntityManager;
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.hasItem;
+import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
@@ -28,6 +36,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
  * Integration tests for the {@link ProductResource} REST controller.
  */
 @SpringBootTest(classes = StoreApp.class)
+@ExtendWith(MockitoExtension.class)
 @AutoConfigureMockMvc
 @WithMockUser
 public class ProductResourceIT {
@@ -48,6 +57,12 @@ public class ProductResourceIT {
 
     @Autowired
     private ProductRepository productRepository;
+
+    @Mock
+    private ProductRepository productRepositoryMock;
+
+    @Mock
+    private ProductService productServiceMock;
 
     @Autowired
     private ProductService productService;
@@ -73,6 +88,16 @@ public class ProductResourceIT {
             .price(DEFAULT_PRICE)
             .image(DEFAULT_IMAGE)
             .imageContentType(DEFAULT_IMAGE_CONTENT_TYPE);
+        // Add required entity
+        ProductCategory productCategory;
+        if (TestUtil.findAll(em, ProductCategory.class).isEmpty()) {
+            productCategory = ProductCategoryResourceIT.createEntity(em);
+            em.persist(productCategory);
+            em.flush();
+        } else {
+            productCategory = TestUtil.findAll(em, ProductCategory.class).get(0);
+        }
+        product.getProductCategories().add(productCategory);
         return product;
     }
     /**
@@ -88,6 +113,16 @@ public class ProductResourceIT {
             .price(UPDATED_PRICE)
             .image(UPDATED_IMAGE)
             .imageContentType(UPDATED_IMAGE_CONTENT_TYPE);
+        // Add required entity
+        ProductCategory productCategory;
+        if (TestUtil.findAll(em, ProductCategory.class).isEmpty()) {
+            productCategory = ProductCategoryResourceIT.createUpdatedEntity(em);
+            em.persist(productCategory);
+            em.flush();
+        } else {
+            productCategory = TestUtil.findAll(em, ProductCategory.class).get(0);
+        }
+        product.getProductCategories().add(productCategory);
         return product;
     }
 
@@ -193,6 +228,26 @@ public class ProductResourceIT {
             .andExpect(jsonPath("$.[*].image").value(hasItem(Base64Utils.encodeToString(DEFAULT_IMAGE))));
     }
     
+    @SuppressWarnings({"unchecked"})
+    public void getAllProductsWithEagerRelationshipsIsEnabled() throws Exception {
+        when(productServiceMock.findAllWithEagerRelationships(any())).thenReturn(new PageImpl(new ArrayList<>()));
+
+        restProductMockMvc.perform(get("/api/products?eagerload=true"))
+            .andExpect(status().isOk());
+
+        verify(productServiceMock, times(1)).findAllWithEagerRelationships(any());
+    }
+
+    @SuppressWarnings({"unchecked"})
+    public void getAllProductsWithEagerRelationshipsIsNotEnabled() throws Exception {
+        when(productServiceMock.findAllWithEagerRelationships(any())).thenReturn(new PageImpl(new ArrayList<>()));
+
+        restProductMockMvc.perform(get("/api/products?eagerload=true"))
+            .andExpect(status().isOk());
+
+        verify(productServiceMock, times(1)).findAllWithEagerRelationships(any());
+    }
+
     @Test
     @Transactional
     public void getProduct() throws Exception {

@@ -2,6 +2,7 @@ package com.unubol.demo.store.web.rest;
 
 import com.unubol.demo.store.StoreApp;
 import com.unubol.demo.store.domain.Attribute;
+import com.unubol.demo.store.domain.Product;
 import com.unubol.demo.store.repository.AttributeRepository;
 import com.unubol.demo.store.service.AttributeService;
 
@@ -64,6 +65,16 @@ public class AttributeResourceIT {
             .name(DEFAULT_NAME)
             .image(DEFAULT_IMAGE)
             .imageContentType(DEFAULT_IMAGE_CONTENT_TYPE);
+        // Add required entity
+        Product product;
+        if (TestUtil.findAll(em, Product.class).isEmpty()) {
+            product = ProductResourceIT.createEntity(em);
+            em.persist(product);
+            em.flush();
+        } else {
+            product = TestUtil.findAll(em, Product.class).get(0);
+        }
+        attribute.getProducts().add(product);
         return attribute;
     }
     /**
@@ -77,6 +88,16 @@ public class AttributeResourceIT {
             .name(UPDATED_NAME)
             .image(UPDATED_IMAGE)
             .imageContentType(UPDATED_IMAGE_CONTENT_TYPE);
+        // Add required entity
+        Product product;
+        if (TestUtil.findAll(em, Product.class).isEmpty()) {
+            product = ProductResourceIT.createUpdatedEntity(em);
+            em.persist(product);
+            em.flush();
+        } else {
+            product = TestUtil.findAll(em, Product.class).get(0);
+        }
+        attribute.getProducts().add(product);
         return attribute;
     }
 
