@@ -25,7 +25,7 @@
     "packageName": "com.unubol.demo.store",
     "packageFolder": "com/unubol/demo/store",
     "useSass": true,
-    "jhipsterVersion": "6.10.3",
+    "jhipsterVersion": "6.10.5",
     "creationTimestamp": 1607884080030,
     "skipServer": false,
     "clientPackageManager": "npm",
